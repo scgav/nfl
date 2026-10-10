@@ -7,6 +7,21 @@ const sortLast=(a,b)=>a.name.split(" ").at(-1).localeCompare(b.name.split(" ").a
 const board=[...PLAYERS];
 for(let i=board.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[board[i],board[j]]=[board[j],board[i]];}
 
+
+const IMAGE_OVERRIDES = {
+  "James Cook":
+    "https://a.espncdn.com/i/headshots/nfl/players/full/4379399.png",
+
+  "Patrick Surtain II":
+    "https://a.espncdn.com/i/headshots/nfl/players/full/4372012.png",
+
+  "Derwin James":
+    "https://a.espncdn.com/i/headshots/nfl/players/full/3691739.png",
+
+  "Bobby Wagner":
+    "https://a.espncdn.com/i/headshots/nfl/players/full/14979.png"
+};
+
 // ESPN publishes NFL player portraits through its athlete roster data.
 // Team IDs are stable ESPN NFL team identifiers; image URLs are extracted from roster objects.
 const TEAMS=["ari","atl","bal","buf","car","chi","cin","cle","dal","den","det","gb","hou","ind","jax","kc","lv","lac","lar","mia","min","ne","no","nyg","nyj","phi","pit","sf","sea","tb","ten","wsh"];
@@ -72,7 +87,9 @@ function makeCard(player,index,images){
  const card=document.createElement("article");card.className="card";
  card.innerHTML=`<div class="photoWrap"><div class="rank">FACE ${index+1}</div><img hidden alt="NFL player headshot"></div><div class="answer"><input autocomplete="off" spellcheck="false" aria-label="Name this NFL player" placeholder="Type a player name…"><button type="button" class="clear" aria-label="Clear answer">×</button><div class="menu" role="listbox"></div></div><div class="feedback"></div>`;
  const img=card.querySelector("img"),input=card.querySelector("input"),menu=card.querySelector(".menu");
- const url=images.get(canonical(player.name));
+ const url =
+  IMAGE_OVERRIDES[player.name] ||
+  images.get(canonical(player.name));
  if(url){img.onload=()=>img.hidden=false;img.onerror=()=>img.hidden=true;img.src=url}
  input.addEventListener("focus",()=>menuFor(card,input,menu,player));
  input.addEventListener("input",()=>{if(input.dataset.selected&&input.value!==input.dataset.selected){selections.delete(player.id);input.dataset.selected="";card.classList.remove("matched");update()}menuFor(card,input,menu,player)});
