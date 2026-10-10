@@ -106,7 +106,11 @@ function makeCard(player,index,images){
 async function init(){
  const images=await imagesFromRosters();
  board.forEach((p,i)=>makeCard(p,i,images));update();
- const missing=PLAYERS.filter(p=>!images.has(canonical(p.name))).length;
+ const missing = PLAYERS.filter(
+  p =>
+    !IMAGE_OVERRIDES[p.name] &&
+    !images.has(canonical(p.name))
+).length;
  el("imageNotice").textContent=missing?`NFL headshots: ${missing} of ${TOTAL} players could not be matched to the ESPN roster directory.`:"2026 NFL Top 100 • Player headshots from ESPN.";
 }
 init();
